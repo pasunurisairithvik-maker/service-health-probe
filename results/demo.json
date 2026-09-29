@@ -1,0 +1,36 @@
+{
+  "checked_at": "2026-09-29T21:54:31.486517+00:00",
+  "all_healthy": false,
+  "results": [
+    {
+      "url": "http://127.0.0.1:33503/ready",
+      "healthy": true,
+      "observations": [
+        {
+          "attempt": 1,
+          "status": 200,
+          "category": "healthy",
+          "elapsed_ms": 2.148
+        }
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:33503/broken",
+      "healthy": false,
+      "observations": [
+        {
+          "attempt": 1,
+          "status": 503,
+          "category": "unexpected_status",
+          "elapsed_ms": 1.475
+        },
+        {
+          "attempt": 2,
+          "status": 503,
+          "category": "unexpected_status",
+          "elapsed_ms": 1.272
+        }
+      ]
+    }
+  ]
+}

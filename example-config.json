@@ -1,0 +1,1 @@
+[{"url":"http://127.0.0.1:8004/inventory","expected_status":200,"marker":"stock","timeout":2,"attempts":2}]
