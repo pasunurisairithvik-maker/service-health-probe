@@ -1,6 +1,7 @@
 """Bounded, read-only HTTP health probing; no automatic repair or alert sending."""
 import argparse
 import json
+from http.client import HTTPException
 import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
@@ -16,7 +17,10 @@ def check(url, timeout=2, attempts=2, expected_status=200, marker=None, opener=N
     parsed=urlparse(url)
     if parsed.scheme not in ('http','https') or not parsed.hostname or parsed.username or parsed.password or parsed.query or parsed.fragment:
         raise ValueError('Use an HTTP(S) URL without credentials, query parameters, or fragments')
-    if not 0<timeout<=30 or not 1<=attempts<=5 or not 100<=expected_status<=599:
+    if (type(timeout) not in (int,float) or not 0<timeout<=30
+        or type(attempts) is not int or not 1<=attempts<=5
+        or type(expected_status) is not int or not 100<=expected_status<=599
+        or (marker is not None and not isinstance(marker,str))):
         raise ValueError('Invalid timeout, attempt count, or expected status')
     client=opener or build_opener(NoRedirect())
     observations=[]
@@ -40,7 +44,7 @@ def check(url, timeout=2, attempts=2, expected_status=200, marker=None, opener=N
                 category='content_mismatch'
             else:
                 category='healthy'
-        except (URLError,TimeoutError,OSError):
+        except (URLError,TimeoutError,OSError,HTTPException):
             category='network_error'
         observations.append({'attempt':i+1,'status':status,'category':category,'elapsed_ms':round((time.monotonic()-started)*1000,3)})
         if category=='healthy': break

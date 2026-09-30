@@ -34,6 +34,17 @@ class ProbeTests(unittest.TestCase):
         f=Fake([URLError('private detail'),URLError('private detail')])
         r=check('http://localhost',opener=f,sleep=lambda _:None)
         self.assertEqual(f.calls,2);self.assertFalse(r['healthy']);self.assertNotIn('private detail',str(r))
+    def test_truncated_response_retried(self):
+        from http.client import IncompleteRead
+        class Truncated(Response):
+            def read(self,*args):raise IncompleteRead(b'partial',100)
+        broken=Truncated(200)
+        r=check('http://localhost',opener=Fake([broken,Response(200)]),sleep=lambda _:None)
+        self.assertTrue(r['healthy']);self.assertTrue(broken.closed)
+        self.assertEqual(r['observations'][0]['category'],'network_error')
+    def test_invalid_option_types(self):
+        for kwargs in [{'attempts':1.5},{'attempts':True},{'timeout':'2'},{'expected_status':200.5},{'marker':42}]:
+            with self.assertRaises(ValueError):check('http://localhost',**kwargs)
     def test_http_error_closed(self):
         body=io.BytesIO(b'not found')
         error=HTTPError('http://localhost',404,'missing',{},body)
