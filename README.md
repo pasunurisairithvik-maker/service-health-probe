@@ -1,4 +1,6 @@
 # Service Health Probe
+
+Release 1.0 within its documented scope. See [release and operating notes](RELEASE.md).
 A small Python operations tool that distinguishes a reachable server from a working application. It checks status and optional response content, retries transient failures within fixed limits, and writes a JSON report with attempt timings. Exit codes make it usable in a shell or CI.
 
 ## Two concrete cases
