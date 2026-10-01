@@ -21,5 +21,5 @@ At most 20 targets, four worker threads, 1–5 attempts, a per-operation socket 
 
 This is a one-shot probe, not a monitoring platform. A socket timeout is not a strict overall deadline: DNS and slow trickle responses can exceed it. It cannot establish long-term uptime, diagnose a root cause, handle authenticated checks, or repair a service. Public deployment would require an explicit destination allowlist to prevent misuse against internal services. No alert messages or external services are used by the demo.
 
-## Why it belongs in a student portfolio
-Demonstrates HTTP troubleshooting, bounded retries, concurrent work, machine-readable evidence, and meaningful failure tests. Read STUDENT_GUIDE.md before claiming individual contributions. AI-assisted initial implementation; no production use or customer impact claimed.
+## Engineering focus
+Demonstrates HTTP troubleshooting, bounded retries, concurrent work, machine-readable evidence, and meaningful failure tests. See STUDENT_GUIDE.md for the implementation walkthrough. No production use or customer impact is claimed.
